@@ -25,6 +25,7 @@
   const status = dialog.querySelector('[role="status"]');
   const chapter = document.querySelector('h1').textContent.trim();
   let revision = 0;
+  let defaultQuestion;
 
   function resetCopy() {
     revision++;
@@ -36,7 +37,7 @@
   dialog.addEventListener('close', resetCopy);
   dialog.querySelector('.journal-ai-copy').addEventListener('click', async () => {
     const current = revision;
-    const request = question.value.trim() || '문제의 조건을 어떤 순서로 판단하는지 설명하고, 필요한 계산과 차변·대변의 근거를 보여주세요.';
+    const request = question.value.trim() || defaultQuestion;
     const text = ['회계 분개노트 · ' + label.textContent, preview.textContent, '내 질문\n' + request].join('\n\n');
     try {
       await navigator.clipboard.writeText(text);
@@ -51,21 +52,37 @@
     }
   });
 
-  for (const prompt of document.querySelectorAll('section .prompt')) {
+  function addQuestionButton(prompt, recall) {
     const section = prompt.closest('section');
     const button = document.createElement('button');
     button.type = 'button';
     button.className = 'journal-ai-ask';
-    button.textContent = 'AI에게 물어보기';
+    button.textContent = recall ? '회상 문제 AI에게 물어보기' : 'AI에게 물어보기';
     button.setAttribute('aria-haspopup', 'dialog');
-    prompt.after(button);
+    const anchor = recall || prompt;
+    anchor.after(button);
     button.addEventListener('click', () => {
       label.textContent = [chapter, section.querySelector('.num').textContent, section.querySelector('h2').textContent].join(' · ');
-      preview.textContent = prompt.innerText.trim();
+      const conditions = prompt.innerText.trim();
+      if (recall) {
+        defaultQuestion = '위 회상 문제에 답하고, 사례에서 그 판단의 근거가 되는 조건을 짚어 주세요.';
+        label.textContent += ' · 회상 문제';
+        const recallQuestion = recall.querySelector('summary').textContent.trim();
+        preview.textContent = recallQuestion + '\n\n참고할 사례 조건\n' + conditions;
+      } else {
+        defaultQuestion = '문제의 조건을 어떤 순서로 판단하는지 설명하고, 필요한 계산과 차변·대변의 근거를 보여주세요.';
+        preview.textContent = conditions;
+      }
       question.value = '';
       dialog.querySelector('details').open = false;
       resetCopy();
       dialog.showModal();
     });
+  }
+
+  for (const prompt of document.querySelectorAll('section .prompt')) {
+    addQuestionButton(prompt);
+    const recall = prompt.closest('section').querySelector('details.recall');
+    if (recall) addQuestionButton(prompt, recall);
   }
 })();
