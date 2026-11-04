@@ -1,0 +1,14 @@
+.journal-ai-ask { margin: .65rem 0; }
+.journal-ai-dialog { box-sizing: border-box; width: min(34rem, calc(100% - 2rem)); max-height: 85vh; overflow: auto; padding: 1.25rem; color: #192e24; background: #fff; border: 1px solid #b9cbbe; border-radius: 14px; }
+.journal-ai-dialog::backdrop { background: rgb(17 35 26 / 48%); }
+.journal-ai-dialog form, .journal-ai-links { display: flex; align-items: center; gap: .75rem; }
+.journal-ai-dialog form { justify-content: space-between; }
+.journal-ai-dialog h2 { margin: 0; font-size: 1.3rem; }
+.journal-ai-case { font-weight: 700; color: #285440; }
+.journal-ai-dialog label { display: block; font-weight: 700; }
+.journal-ai-dialog textarea { box-sizing: border-box; width: 100%; margin: .5rem 0; padding: .65rem; font: inherit; border: 1px solid #889e90; border-radius: 6px; }
+.journal-ai-dialog summary { cursor: pointer; }
+.journal-ai-dialog pre { white-space: pre-wrap; overflow-wrap: anywhere; font: inherit; }
+.journal-ai-links { flex-wrap: wrap; }
+.journal-ai-links a { color: #21593c; text-decoration: underline; }
+@media print { .journal-ai-ask, .journal-ai-dialog { display: none; } }
