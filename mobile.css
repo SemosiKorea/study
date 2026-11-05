@@ -1,0 +1,80 @@
+/* Shared reading layout: allow content to wrap before it creates a scroll area. */
+body { overflow-wrap: anywhere; }
+:is(.layout, .cards, .brand, .chapters, .controls, .row, .journal) > * { min-width: 0; }
+:is(button, select, textarea, input) { max-width: 100%; }
+button, summary, a { touch-action: manipulation; }
+img { max-width: 100%; }
+section > header { flex-wrap: wrap; }
+section > header .num { flex-shrink: 0; }
+.scroll { overflow: visible; }
+table { max-width: 100%; table-layout: fixed; }
+td, th { white-space: normal; overflow-wrap: anywhere; }
+.journal { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.journal span { overflow-wrap: anywhere; }
+.journal b { max-width: 100%; }
+.journal-ai-dialog { max-height: calc(100dvh - 2rem); overflow-wrap: anywhere; }
+.journal-ai-dialog form { flex-wrap: wrap; }
+.journal-ai-dialog form button { flex-shrink: 0; }
+
+@media screen and (max-width: 900px) {
+  .layout { display: block; margin-top: 17px; }
+  nav { position: static; margin-bottom: 16px; }
+  nav strong { margin: 0 0 6px; }
+  nav a { display: inline-block; margin-right: 10px; padding: 10px 0; font-size: .9rem; }
+}
+
+@media screen and (max-width: 600px) {
+  .hero h1 { font-size: clamp(2rem, 8vw, 3rem); line-height: 1.25; }
+  .brand { gap: 10px; }
+  .brand img { flex-shrink: 0; }
+  .brand > span { flex-basis: 100%; margin-left: 0; }
+  .brand select[data-appearance] { min-height: 44px; }
+  .chapters { align-items: stretch; gap: 8px; }
+  .chapters > * { flex-basis: 100%; }
+  .chapters a { padding: 4px 0; }
+  .controls button { flex: 1 1 130px; }
+  button, select { min-height: 44px; }
+  summary { min-height: 44px; }
+  .prompt, aside { padding: 12px; }
+  .journal { grid-template-columns: minmax(0, 1fr); }
+  .journal > div { padding: 10px 12px; }
+  .journal > div + div { border-left: 0; border-top: 1px solid #d4dfd4; }
+  .journal span { gap: 4px 12px; }
+  .row { align-items: flex-start; }
+  .row small, .row i { flex-shrink: 0; }
+  .row span { min-width: 0; }
+  .card small { display: block; padding-right: 22px; }
+  .journal-ai-dialog { width: calc(100% - 20px); padding: 16px; }
+  .journal-ai-dialog textarea { font-size: 16px; }
+  .journal-ai-links { align-items: stretch; }
+  .journal-ai-links a { display: block; min-height: 44px; padding: 8px 0; }
+
+  /* Keep column labels with every value when a table becomes a vertical list. */
+  .mobile-table, .mobile-table :is(tbody, tfoot) { display: block; width: 100%; }
+  .mobile-table caption { display: block; width: 100%; }
+  .mobile-table thead, .mobile-table .mobile-table-heading {
+    position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+    overflow: hidden; clip-path: inset(50%); white-space: nowrap;
+  }
+  .mobile-table tr:not(.mobile-table-heading) {
+    display: block; margin: 10px 0; border: 1px solid #b5c6be; border-radius: 8px;
+  }
+  .mobile-table :is(th, td) {
+    display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr);
+    gap: 8px; width: auto; padding: 8px 10px; text-align: right;
+  }
+  .mobile-table :is(th, td)::before {
+    content: attr(data-column-label); font-weight: 600; text-align: left;
+  }
+  .mobile-table tr > :first-child {
+    display: block; text-align: left; font-weight: 700; background: #edf3ea;
+    border-radius: 7px 7px 0 0;
+  }
+  .mobile-table tr > :first-child::before { content: attr(data-column-label) " · "; }
+  .mobile-table .mobile-table-prose { display: block; text-align: left; }
+  .mobile-table .mobile-table-prose::before { display: block; margin-bottom: 4px; }
+  .mobile-table tr > :first-child::before { display: inline; }
+  .mobile-table tr > :last-child { border-bottom: 0; }
+  [data-study-theme="dark"] .mobile-table tr { border-color: var(--edge); }
+  [data-study-theme="dark"] .mobile-table tr > :first-child { background: var(--raised); }
+}
